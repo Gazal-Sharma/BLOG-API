@@ -1,0 +1,383 @@
+openaoi: 3.1.0
+info:
+  title: BLOG API
+  description : Creating, Reading, Updating and Deleting - Users,Posts and Comments
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+paths:
+  /blogp/get:
+    get:
+      summary: Get all Posts
+      description: Get all blog posts (requires login)
+      responses:
+        '200':
+          description: List of Posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlogPost'
+        '401':
+          description: Unauthorised
+  /blogp/post:
+    post:
+      summary: Create a new post (requires login)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlogPost'
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+
+  /blogp/get/login/{post_title}:
+    get:
+      summary: Get a post by title (requires login)
+      parameters:
+        - name: title
+          in: path
+          required: true
+          schema: 
+            type: string
+      responses:
+        '200':
+          description: Post found 
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/BlogPost'
+        '404':
+          description: Post not found
+        '401':
+          description: Unauthorised
+    /blogp/get/{post_title}:
+    get:
+      summary: Get a post by title (no login required)
+      parameters:
+        - name: title
+          in : path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A single post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '404':
+          description: Post not found
+  /blogp/put/{post_title}:
+    put:
+      summary: Update your post (login required)
+      parameters:
+        - name: title
+          in : path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Post_Title:
+                  type: string
+                Post_Content:
+                  type: string
+      responses:
+        '200':
+          description: Post updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '400':
+          description: Invalid input
+        '404':
+          description: Post not found
+  /blogp/delete/{post_title}:
+    delete:
+      summary: Delete a post (Login required)
+      parameters:
+        - name: title
+          in : path
+          required: true
+          schema:
+            type: string
+       responses:
+        '200':
+          description: Post deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '404':
+          description: Post not found
+          
+
+  /comments/get/login/{post_title}:
+    get:
+      summary: Get all comments on a post (login required)
+      description: Get all comments for a post. If logged in, retrieve comments for any post including those not authored by the logged-in user.
+      parameters:
+        - name: title
+          in : path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comments retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+
+        '401':
+          description: Unauthorized, please Login or Signup
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '404':
+          description: Could not get comments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+    get:
+      summary: get comments for a post (No login required)
+      description: no need to login while reading posts on the Blog
+      parameters:
+        - name: title
+          in : path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comments retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '404':
+          description: Could not get comments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    
+  /comments/post/{post_title}:
+    post:
+      summary: Create a comment on a particular post (Login required)
+      parameters:
+        - name: title
+          in : path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '401':
+          description: Unauthorised access
+        '404':
+          description: Could not create comment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /comments/put/{post_title}:
+    put:
+      description: update a comment (Login required)
+      parameters:
+        - name: title
+          in : path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Comment updated
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+        '401':
+          description: Unauthorised access
+        '404':
+          description: Could not update comment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+  /comments/delete/{post_title}:
+    delete:
+      summary: Deleting a comment (Login required)
+      parameters:
+        - name: title
+          in : path
+          required: true
+          schema:
+            type: string
+       responses:
+        '200':
+          description: Comment deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogPost'
+        '404':
+          description: comment not found
+
+  /user/signin:
+    post:
+      summary: Sign in
+      description: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User registered successfully
+        '400':
+          description: Bad request
+  
+  /user/login:
+    post:
+      summary: Log in an existing user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Logged in successfully
+        '401':
+          description: Invalid username or password
+
+  /user/logout:
+    post:
+      summary: Log out the current user
+      responses:
+        '200':
+          description: Logged out successfully
+        '401':
+          description: Unauthorized - user is not logged in
+
+  /user/update:
+    put:
+      summary: Update user information (requires login)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                u_name:
+                  type: string
+                u_email:
+                  type: string
+                u_username:
+                  type: string
+                u_password:
+                  type: string
+                new_u_password:
+                  type: string
+      responses:
+        '200':
+          description: User updated successfully
+        '401':
+          description: Unauthorized or incorrect password
+        '404':
+          description: User not found or no changes made
+
+  /user/delete:
+    delete:
+      summary: Delete user account (requires login)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                u_password:
+                  type: string
+              required:
+                - u_password
+      responses:
+        '200':
+          description: User deleted successfully
+        '401':
+          description: Unauthorized or incorrect password
+        '404':
+          description: User not found or unable to delete
+
+      
