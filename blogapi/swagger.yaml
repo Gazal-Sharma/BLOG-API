@@ -5,8 +5,10 @@ info:
   version: 1.0.0
 servers:
   - url: http://localhost:5000
+
 paths:
-  /blogp/get:
+
+  /blogpt/get:
     get:
       summary: Get all Posts
       description: Get all blog posts (requires login)
@@ -21,7 +23,9 @@ paths:
                   $ref: '#/components/schemas/BlogPost'
         '401':
           description: Unauthorised
-  /blogp/post:
+
+
+  /blogpt/post:
     post:
       summary: Create a new post (requires login)
       requestBody:
@@ -42,7 +46,8 @@ paths:
         '401':
           description: Unauthorized
 
-  /blogp/get/login/{post_title}:
+
+  /blogpt/get/login/{post_title}:
     get:
       summary: Get a post by title (requires login)
       parameters:
@@ -62,11 +67,13 @@ paths:
           description: Post not found
         '401':
           description: Unauthorised
-    /blogp/get/{post_title}:
+ 
+ 
+  /blogpt/get/{post_title}:
     get:
       summary: Get a post by title (no login required)
       parameters:
-        - name: title
+        - name: post_title
           in : path
           required: true
           schema:
@@ -80,7 +87,9 @@ paths:
                 $ref: '#/components/schemas/BlogPost'
         '404':
           description: Post not found
-  /blogp/put/{post_title}:
+
+
+  /blogpt/put/{post_title}:
     put:
       summary: Update your post (login required)
       parameters:
@@ -111,7 +120,9 @@ paths:
           description: Invalid input
         '404':
           description: Post not found
-  /blogp/delete/{post_title}:
+ 
+ 
+  /blogpt/delete/{post_title}:
     delete:
       summary: Delete a post (Login required)
       parameters:
@@ -131,12 +142,12 @@ paths:
           description: Post not found
           
 
-  /comments/get/login/{post_title}:
+  /comment/get/login/{post_title}:
     get:
       summary: Get all comments on a post (login required)
       description: Get all comments for a post. If logged in, retrieve comments for any post including those not authored by the logged-in user.
       parameters:
-        - name: title
+        - name: post_title
           in : path
           required: true
           schema:
@@ -169,6 +180,9 @@ paths:
                 properties:
                   error:
                     type: string
+
+
+  /comment/get/{post_title}:
     get:
       summary: get comments for a post (No login required)
       description: no need to login while reading posts on the Blog
@@ -196,12 +210,13 @@ paths:
                 properties:
                   error:
                     type: string
-                    
-  /comments/post/{post_title}:
+
+
+  /comment/post/{post_title}:
     post:
       summary: Create a comment on a particular post (Login required)
       parameters:
-        - name: title
+        - name: post_title
           in : path
           required: true
           schema:
@@ -226,11 +241,13 @@ paths:
                 properties:
                   error:
                     type: string
-  /comments/put/{post_title}:
+ 
+ 
+  /comment/put/{post_title}:
     put:
       description: update a comment (Login required)
       parameters:
-        - name: title
+        - name: post_title
           in : path
           required: true
           schema:
@@ -255,11 +272,13 @@ paths:
                 properties:
                   error:
                     type: string
-  /comments/delete/{post_title}:
+ 
+ 
+  /comment/delete/{post_title}:
     delete:
       summary: Deleting a comment (Login required)
       parameters:
-        - name: title
+        - name: post_title
           in : path
           required: true
           schema:
@@ -274,7 +293,8 @@ paths:
         '404':
           description: comment not found
 
-  /user/signin:
+
+  /users/signin:
     post:
       summary: Sign in
       description: Register new user
@@ -299,7 +319,8 @@ paths:
         '400':
           description: Bad request
   
-  /user/login:
+
+  /users/login:
     post:
       summary: Log in an existing user
       requestBody:
@@ -321,7 +342,8 @@ paths:
         '401':
           description: Invalid username or password
 
-  /user/logout:
+
+  /users/logout:
     post:
       summary: Log out the current user
       responses:
@@ -329,8 +351,31 @@ paths:
           description: Logged out successfully
         '401':
           description: Unauthorized - user is not logged in
+ 
+ 
+  /users/getusers:
+    get:
+      summary: Read information of all users
+      responses:
+        '200':
+          description: Successfully retrieved users
+          schema:
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  type: object
+        '500':
+          description: Internal server error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
 
-  /user/update:
+
+  /users/update:
     put:
       summary: Update user information (requires login)
       requestBody:
@@ -358,7 +403,8 @@ paths:
         '404':
           description: User not found or no changes made
 
-  /user/delete:
+
+  /users/delete:
     delete:
       summary: Delete user account (requires login)
       requestBody:
@@ -380,4 +426,19 @@ paths:
         '404':
           description: User not found or unable to delete
 
+
+components:
+  schemas:
+    BlogPost:
+      type: object
+      properties:
+        Post_Title:
+          type: string
+        Post_Content:
+          type: string
+    Comment:
+      type: object
+      properties:
+        c_Content:
+          type: string
       

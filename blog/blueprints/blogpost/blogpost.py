@@ -4,7 +4,7 @@ from datetime import datetime
 blog_post = Blueprint("blog_post", __name__)
 
 ### ! should be logged in, there should be no need to put in username
-## get all posts by me  --- ME(done)
+## get all posts by me  --- ME
 @blog_post.route('/get', methods = ['GET'])
 def get_posts_all():
     if "user_det" in session:
@@ -22,7 +22,7 @@ def get_posts_all():
             return jsonify({'error': 'Could not fetch BlogPosts'}), 404
     
 
-## get a particular post using title but MY post -- Me, should pass username(done)
+## get a particular post using title but MY post -- Me, should pass username
 @blog_post.route('/get/login/<string:title>', methods = ['GET'])
 def get_post_l(title):
     if "user_det" in session:
@@ -57,8 +57,8 @@ def get_post_o(title):
         return jsonify({'error': 'Could not fetch BlogPost'}), 404
 
 
-## ! needs to be logged in, b_id, username_post, Post_Author, Post_Time should come on its own
-## create a new post(done)
+## ! needs to be logged in
+## create a new post
 @blog_post.route('/post', methods = ['POST'])
 def create_post():
     if "user_det" in session:
@@ -86,7 +86,7 @@ def create_post():
         return jsonify({'message': 'Unauthorized access. Please log in.'}), 401
 
 
-## ! needs to be logged in , username passed in, timestamp should be passed on its own
+## ! needs to be logged in 
 ##update a post
 @blog_post.route('/put/<string:title>', methods = ['PUT'])
 def update_post(title):
@@ -117,7 +117,7 @@ def update_post(title):
         return jsonify({'message': 'Unauthorized, Please Login or Signup'}), 401
 
 
-## ! needs to be logged in, username passed in on its own
+## ! needs to be logged in
 ## delete a post -- ME
 @blog_post.route('/delete/<string:title>', methods = ['DELETE'])
 def delete_post(title):

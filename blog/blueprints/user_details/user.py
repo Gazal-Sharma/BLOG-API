@@ -3,7 +3,7 @@ from flask_bcrypt import Bcrypt
 user = Blueprint("user", __name__)
 
 
-## get list of users (only by company itself) ???
+
 
 ## ! could be logged in or not logged in
 ## enter as a user
@@ -44,6 +44,7 @@ def sign_in():
     conn.close()
     return jsonify({'message': 'User registered successfully'}), 201
 
+
 @user.route('/login', methods = ['POST'])
 def login():
     from db_run import app, db, db_connection
@@ -74,18 +75,6 @@ def login():
     else:
         return jsonify({'message': 'Incorrect password'}), 401
     
-    
-
-   
-    # ? cur.execute(
-    #    '''SELECT u_email, u_username, u_password FROM Users'''
-    # )
-    # user = cur.fetchone()
-    # if (user[0] != data['u_email'] or user[1] != data['u_username']):
-    #     return jsonify({'message': 'user doesnot exist, Please sign in'})
-    
-    # if (user[0] == data['u_email'] and user[1] == data['u_username'] and user[2] == data['u_password']):
-    #     return jsonify({'message': 'User logged in successfully'}), 201
 
 @user.route('/getusers', methods=['GET'])
 def get_all_users():
@@ -118,6 +107,7 @@ def get_all_users():
     finally:
         cur.close()
         conn.close()
+
 
 ## logout
 @user.route('/logout', methods = ['POST'])

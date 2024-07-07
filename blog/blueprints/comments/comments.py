@@ -3,7 +3,7 @@ from datetime import datetime
 
 comments = Blueprint("comments", __name__)
 
-### ! should be logged in, there should be no need to put in username, shoould search from only users posts
+### ! should be logged in
 ## get all comments on my post by giving title --- ME, but post title might not be unique, thats why username
 @comments.route('/get/login/<string:title>', methods = ['GET'])
 def get_comments(title):
@@ -40,7 +40,7 @@ def get_comments_one(title):
     else:
         return jsonify({'error': 'Could not fetch Comments'}), 404
 
-## ! needs to be logged in, c_id, Post_title, c_Author, Post_Time should come on its own
+## ! needs to be logged in
 ## create a new post
 @comments.route('/post/<string:title>', methods = ['POST'])
 def create_comment(title):
@@ -66,7 +66,7 @@ def create_comment(title):
         return jsonify({'message': 'Comment Created Successfully'}), 200
 
 
-## ! needs to be logged in , username passed in, timestamp should be passed on its own
+## ! needs to be logged in 
 ##update a post
 @comments.route('/put/<string:title>', methods = ['PUT'])
 def update_comm(title):
@@ -92,7 +92,7 @@ def update_comm(title):
         return jsonify({'message': 'Unauthorized access'}), 401
 
 ######
-## ! needs to be logged in, username passed in on its own, after title it should pass username of comment author
+## ! needs to be logged in
 ## delete a comment on a particular post -- ME
 @comments.route('/delete/<string:title>', methods = ['DELETE'])
 def delete_comm(title):
