@@ -69,7 +69,7 @@ def create_post():
         from db_run import db, db_connection
         conn = db_connection()
         cur = conn.cursor()
-        data = request.get_data_json()
+        data = request.get_json()
 
         title = data.get('Post_Title')
         content = data.get('Post_Content')

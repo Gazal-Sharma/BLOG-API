@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Comments(
     c_Author VARCHAR(20) NOT NULL,
     c_Time_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     c_Time_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (post_title) REFERENCES BlogPost(Post_Title),  -- Reference the unique constraint
+    FOREIGN KEY (post_title) REFERENCES BlogPost(Post_Title), 
     FOREIGN KEY (username_post) REFERENCES Users(u_username)
 );
 

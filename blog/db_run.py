@@ -1,9 +1,9 @@
 from flask import Flask, render_template
 import psycopg2
 from flask_sqlalchemy import SQLAlchemy
-from blog.blueprints.blogpost.blogpost import blog_post
-from blog.blueprints.comments.comments import comments
-from blog.blueprints.user_details.user import user
+from blueprints.blogpost.blogpost import blog_post
+from blueprints.comments.comments import comments
+from blueprints.user_details.user import user
 app = Flask(__name__)
 
 # configuring database
@@ -49,9 +49,6 @@ app.register_blueprint(comments, url_prefix = '/comment')
 app.register_blueprint(user, url_prefix = '/users')
 # running app with debug
 
-@app.route('/')
-def home():
-    return render_template('base.html')
     
 if __name__ == "__main__":
     create_tables()
